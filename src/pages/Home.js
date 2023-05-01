@@ -34,9 +34,21 @@ function Home() {
             return post
           }
 
-        }))
+        })
+        );
+
+        if (likedPosts.includes(postId)) {
+          setLikedPosts(likedPosts.filter((id) => {
+            return id != postId; 
+          })
+          );
+        } else {
+          setLikedPosts([...likedPosts, postId]);
+        }
       })
     };
+
+
 
   return (
     <div>
