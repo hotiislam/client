@@ -1,21 +1,28 @@
-import React from 'react'
+import React, {useContext} from 'react'
 import axios from 'axios'
 import { useEffect, useState } from 'react'
 import { useNavigate} from 'react-router-dom';
 import ThumbUpIcon from '@mui/icons-material/ThumbUp';
+import { AuthContext } from "../helpers/AuthContex";
 
 
 function Home() {
     const [listOfPosts, setListOfPosts] = useState([]);
     const [likedPosts, setLikedPosts ] = useState ([]);
+    const { authState } = useContext(AuthContext);
     let navigate = useNavigate();
 
 
     useEffect(() => {
+
+      if (!localStorage.getItem("accessToken")) {
+        navigate("/login");
+      } else {
       axios.get("http://localhost:3001/posts",{headers: { accessToken: localStorage.getItem('accessToken')}}).then((response) => {
         setListOfPosts(response.data.listOfPosts);
         setLikedPosts(response.data.likedPosts.map((like) => {return like.PostId}));
       })
+     }
     }, []);
 
     const likeAPost = (postId) => {
